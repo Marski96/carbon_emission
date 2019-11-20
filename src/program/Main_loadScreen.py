@@ -12,13 +12,16 @@
 import tkinter as tk
 import pandas as pd
 import numpy as np
+import os as os
+import matplotlib as mpl
 
+from tkinter import ttk
 from tkinter import *
 
 ## Methods ##
 def get_csv_data():
 
-    #clear output
+    #clear output always at first
     output_basicdata.delete('1.0', END)
     output_development.delete('1.0', END)
 
@@ -28,21 +31,28 @@ def get_csv_data():
     year_specified = "Year_" + year
 
     #read csv
-    data = pd.read_csv('data\carbon_data\organized_carbon.csv', delimiter = ';')
+    data = pd.read_csv('data\carbon_data\organized_carbon.csv', delimiter = ';', decimal=",")
 
     #Calculate basic values
     df_carbon = pd.DataFrame(data, columns=['Country_Name', 'Country_Code', year_specified])
     Get_data_by_country_name = df_carbon.loc[df_carbon['Country_Name']==country]
+    carbon_tostring = Get_data_by_country_name.to_string(index=False) #printing dataframe as a string and disapling index
 
     #Calculate development
     df_carbon_development = pd.DataFrame(data, columns=['Year_1960', 'Year_2014'])
     carbon_development_data = df_carbon_development.loc[df_carbon['Country_Name']==country]
-
+    carbon_development_tostring = carbon_development_data.to_string(index=False) #printing dataframe as a string and disapling index
 
     #output data to program
-    output_basicdata.insert(END, Get_data_by_country_name)
-    output_development.insert(END, carbon_development_data)
-    return 
+    print(carbon_tostring)
+    output_basicdata.insert(END, carbon_tostring)
+    output_development.insert(END, carbon_development_tostring)
+    return
+
+def restart_program():
+    python = sys.executable
+    os.execl(python, python, * sys.argv)
+
 
 ######################################## Main screen contents #################################################################
 
@@ -96,8 +106,9 @@ Year_Entry.place(relwidth=0.3, relheight=0.05, relx=0.4, rely=0.14)
 
 #Buttons
 Search_Button = tk.Button(root, text = 'Search', command=get_csv_data)
-Search_Button.place(relwidth=0.15, relheight=0.1, relx=0.72, rely=0.085)
-
+Search_Button.place(relwidth=0.10, relheight=0.05, relx=0.72, rely=0.14)
+Reset_Button = tk.Button(root, text = 'Restart program', command=restart_program)
+Reset_Button.place(relwidth=0.10, relheight=0.036, relx=0, rely=0)
 
 #load the screen
 root.mainloop()
