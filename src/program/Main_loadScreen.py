@@ -11,6 +11,7 @@
 
 import tkinter as tk
 import pandas as pd
+import numpy as np
 
 from tkinter import *
 
@@ -19,6 +20,7 @@ def get_csv_data():
 
     #clear output
     output_basicdata.delete('1.0', END)
+    output_development.delete('1.0', END)
 
     #get input values
     country = Country_Entry.get()
@@ -27,18 +29,20 @@ def get_csv_data():
 
     #read csv
     data = pd.read_csv('data\carbon_data\organized_carbon.csv', delimiter = ';')
+
+    #Calculate basic values
     df_carbon = pd.DataFrame(data, columns=['Country_Name', 'Country_Code', year_specified])
-    
-
-    #get data according to name
-    #Get_data_by_country_name = df_carbon.loc[df_carbon['Country_Name'] == country] ##toimii, hakee nimenmukaan KAIKEN
-
     Get_data_by_country_name = df_carbon.loc[df_carbon['Country_Name']==country]
 
-    
+    #Calculate development
+    df_carbon_development = pd.DataFrame(data, columns=['Year_1960', 'Year_2014'])
+    carbon_development_data = df_carbon_development.loc[df_carbon['Country_Name']==country]
+
+
+    #output data to program
     output_basicdata.insert(END, Get_data_by_country_name)
-    
-    return  
+    output_development.insert(END, carbon_development_data)
+    return 
 
 ######################################## Main screen contents #################################################################
 
@@ -60,40 +64,40 @@ header.pack()
 upperframe = tk.Frame(root, bg='gray')
 upperframe.place(relx=0, rely=0.05, relwidth=1, relheight=0.2)
 
-#Output box
+#Output box basicdata
 output_basicdata = Text(root, bg='gray')
-output_basicdata.place(relx=0.02, rely=0.28, relwidth=0.3, relheight=0.1)
+output_basicdata.place(relx=0.02, rely=0.35, relwidth=0.3, relheight=0.1)
 
-#Output box
+#Output box development
 output_development = Text(root, bg='gray')
-output_development.place(relx=0.02, rely=0.40, relwidth=0.3, relheight=0.1)
+output_development.place(relx=0.02, rely=0.60, relwidth=0.3, relheight=0.1)
 
 #How to use text
 how_to_use = tk.Label(root, text = 'How to use:\n\n This program shows amount of carbon\n dioxide emissions from year 1960 to 2014.\n You are able to search results by using year and country')
 how_to_use.place(relwidth=0.3, relheight=0.16, relx=0.02, rely=0.068 )
 
-
-#Search#################################################################
 #Labels
-Year_Label = tk.Label(root, text = 'Year: ')
-Year_Label.place(relwidth=0.05, relheight=0.05, relx=0.35, rely=0.08)
+Output_basicdata_Label = tk.Label(root, text ='Results', bg='gray', font = ('Calibri, 12'))
+Output_basicdata_Label.place(relx=0.075, rely=0.29, relwidth=0.18, relheight=0.05)
+Output_development_Label = tk.Label(root, text ='Development', bg='gray', font = ('Calibri, 12'))
+Output_development_Label.place(relx=0.075, rely=0.54, relwidth=0.18, relheight=0.05)
 Country_Label = tk.Label(root, text = 'Country: ')
-Country_Label.place(relwidth=0.05, relheight=0.05, relx=0.35, rely=0.14)
+Country_Label.place(relwidth=0.05, relheight=0.05, relx=0.35, rely=0.08)
+Year_Label = tk.Label(root, text = 'Year: ')
+Year_Label.place(relwidth=0.05, relheight=0.05, relx=0.35, rely=0.14)
 
-#Entries'
-
-Year_Entry = tk.Entry(root, textvariable='year')
-Year_Entry.pack()
-Year_Entry.place(relwidth=0.3, relheight=0.05, relx=0.4, rely=0.08)
-
+#Entries
 Country_Entry = tk.Entry(root, textvariable='country')
 Country_Entry.pack()
-Country_Entry.place(relwidth=0.3, relheight=0.05, relx=0.4, rely=0.14)
+Country_Entry.place(relwidth=0.3, relheight=0.05, relx=0.4, rely=0.08)
+Year_Entry = tk.Entry(root, textvariable='year')
+Year_Entry.pack()
+Year_Entry.place(relwidth=0.3, relheight=0.05, relx=0.4, rely=0.14)
 
-#Search button
+#Buttons
 Search_Button = tk.Button(root, text = 'Search', command=get_csv_data)
 Search_Button.place(relwidth=0.15, relheight=0.1, relx=0.72, rely=0.085)
-##########################################################################
+
 
 #load the screen
 root.mainloop()
