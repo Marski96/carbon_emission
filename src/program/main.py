@@ -4,18 +4,14 @@
 ###################################################
 #This is task provided by Reaktor, which shows data
 #from .csv file, which contains carbon emissions
-#from year 1960 to 2014. Application shows data in
-#table format and also graphs. You can search data
-#using year and country.
+#from year 1960 to 2014. Application shows data
+#using pandas and prints it to tkinter.
 ###################################################
 
 import tkinter as tk
 import pandas as pd
-import numpy as np
 import os as os
-import matplotlib as mpl
 
-from tkinter import ttk
 from tkinter import *
 
 ## Methods ##
@@ -46,7 +42,7 @@ def get_csv_data():
     population_tostring = Get_data_by_country_namePOPULATION.to_string(index=False) #printing dataframe as a string and disapling index
     
     #Calculate development
-    df_carbon_development = pd.DataFrame(carbon_data, columns=['Year_1960', 'Year_2014'])
+    df_carbon_development = pd.DataFrame(carbon_data, columns=['Year_1960', 'Year_1970', 'Year_1980', 'Year_1990', 'Year_2000', 'Year_2014'])
     carbon_development_data = df_carbon_development.loc[df_carbon['Country_Name']==country]
     carbon_development_tostring = carbon_development_data.to_string(index=False) #printing dataframe as a string and disapling index
 
@@ -74,7 +70,7 @@ background_label = tk.Label(root, image=background_image)
 background_label.place(relwidth=1, relheight=1)
 
 #Header
-header = tk.Label(root, text = 'Carbon emissions', bg='gray', width=100, font = ('Calibri, 16'))
+header = tk.Label(root, text = 'Carbon emissions', bg='gray', width=100, font = ('Calibri, 18'))
 header.pack()
 
 #Upperframe
@@ -83,27 +79,27 @@ upperframe.place(relx=0, rely=0.05, relwidth=1, relheight=0.2)
 
 #Output box basicdata
 output_basicdata = Text(root, bg='gray')
-output_basicdata.place(relx=0.02, rely=0.35, relwidth=0.3, relheight=0.1)
+output_basicdata.place(relx=0.3, rely=0.30, relwidth=0.6, relheight=0.1)
 
 #Output box development
 output_development = Text(root, bg='gray')
-output_development.place(relx=0.02, rely=0.60, relwidth=0.3, relheight=0.1)
+output_development.place(relx=0.3, rely=0.45, relwidth=0.6, relheight=0.1)
 
 #Ouput box population
 output_population = Text(root, bg='gray')
-output_population.place(relx=0.02, rely=0.85, relwidth=0.3, relheight=0.1)
+output_population.place(relx=0.3, rely=0.60, relwidth=0.6, relheight=0.1)
 
 #How to use text
-how_to_use = tk.Label(root, text = 'How to use:\n\n This program shows amount of carbon\n dioxide emissions from year 1960 to 2014.\n You are able to search results by using year and country')
+how_to_use = tk.Label(root, text = 'How to use:\n\n This program shows amount of carbon\n dioxide emissions from year 1960 to 2014.\n You are able to search results by using year and country\n\n Results are in (kt)')
 how_to_use.place(relwidth=0.3, relheight=0.16, relx=0.02, rely=0.068 )
 
 #Labels
-Output_basicdata_Label = tk.Label(root, text ='Results', bg='gray', font = ('Calibri, 12'))
-Output_basicdata_Label.place(relx=0.075, rely=0.29, relwidth=0.18, relheight=0.05)
-Output_development_Label = tk.Label(root, text ='Development', bg='gray', font = ('Calibri, 12'))
-Output_development_Label.place(relx=0.075, rely=0.54, relwidth=0.18, relheight=0.05)
-Output_population_Label = tk.Label(root, text = 'Population', bg='gray', font = ('Calibri, 12'))
-Output_population_Label.place(relx=0.075, rely=0.79, relwidth=0.18, relheight=0.05)
+Output_basicdata_Label = tk.Label(root, text ='Results', bg='gray', font = ('Calibri, 16'))
+Output_basicdata_Label.place(relx=0.075, rely=0.30, relwidth=0.18, relheight=0.1)
+Output_development_Label = tk.Label(root, text ='Development', bg='gray', font = ('Calibri, 16'))
+Output_development_Label.place(relx=0.075, rely=0.45, relwidth=0.18, relheight=0.1)
+Output_population_Label = tk.Label(root, text = 'Population', bg='gray', font = ('Calibri, 16'))
+Output_population_Label.place(relx=0.075, rely=0.60, relwidth=0.18, relheight=0.1)
 Country_Label = tk.Label(root, text = 'Country: ')
 Country_Label.place(relwidth=0.05, relheight=0.05, relx=0.35, rely=0.08)
 Year_Label = tk.Label(root, text = 'Year: ')
@@ -121,7 +117,7 @@ Year_Entry.place(relwidth=0.3, relheight=0.05, relx=0.4, rely=0.14)
 Search_Button = tk.Button(root, text = 'Search', command=get_csv_data)
 Search_Button.place(relwidth=0.10, relheight=0.05, relx=0.72, rely=0.14)
 Reset_Button = tk.Button(root, text = 'Restart program', command=restart_program)
-Reset_Button.place(relwidth=0.10, relheight=0.036, relx=0, rely=0)
+Reset_Button.place(relwidth=0.10, relheight=0.042, relx=0, rely=0)
 
 #load the screen
 root.mainloop()
