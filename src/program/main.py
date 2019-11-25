@@ -24,6 +24,7 @@ def get_csv_data():
     #clear output always at first
     output_basicdata.delete('1.0', END)
     output_development.delete('1.0', END)
+    output_population.delete('1.0', END)
 
     #get input values
     country = Country_Entry.get()
@@ -31,22 +32,28 @@ def get_csv_data():
     year_specified = "Year_" + year
 
     #read csv
-    data = pd.read_csv('data\carbon_data\organized_carbon.csv', delimiter = ';', decimal=",")
+    carbon_data = pd.read_csv('data\carbon_data\organized_carbon.csv', delimiter= ';', decimal=',')
+    population_data = pd.read_csv('data\population_data\organized_population.csv', delimiter= ';', decimal=',')
 
-    #Calculate basic values
-    df_carbon = pd.DataFrame(data, columns=['Country_Name', 'Country_Code', year_specified])
-    Get_data_by_country_name = df_carbon.loc[df_carbon['Country_Name']==country]
-    carbon_tostring = Get_data_by_country_name.to_string(index=False) #printing dataframe as a string and disapling index
+    #Get basic values
+    df_carbon = pd.DataFrame(carbon_data, columns=['Country_Name', 'Country_Code', year_specified])
+    Get_data_by_country_nameCARBON = df_carbon.loc[df_carbon['Country_Name']==country]
+    carbon_tostring = Get_data_by_country_nameCARBON.to_string(index=False) #printing dataframe as a string and disapling index
 
+    #Get population data
+    df_population = pd.DataFrame(population_data, columns=['Country_Name', year_specified])
+    Get_data_by_country_namePOPULATION = df_population.loc[df_population['Country_Name']==country]
+    population_tostring = Get_data_by_country_namePOPULATION.to_string(index=False) #printing dataframe as a string and disapling index
+    
     #Calculate development
-    df_carbon_development = pd.DataFrame(data, columns=['Year_1960', 'Year_2014'])
+    df_carbon_development = pd.DataFrame(carbon_data, columns=['Year_1960', 'Year_2014'])
     carbon_development_data = df_carbon_development.loc[df_carbon['Country_Name']==country]
     carbon_development_tostring = carbon_development_data.to_string(index=False) #printing dataframe as a string and disapling index
 
     #output data to program
-    print(carbon_tostring)
     output_basicdata.insert(END, carbon_tostring)
     output_development.insert(END, carbon_development_tostring)
+    output_population.insert(END, population_tostring)
     return
 
 def restart_program():
@@ -82,6 +89,10 @@ output_basicdata.place(relx=0.02, rely=0.35, relwidth=0.3, relheight=0.1)
 output_development = Text(root, bg='gray')
 output_development.place(relx=0.02, rely=0.60, relwidth=0.3, relheight=0.1)
 
+#Ouput box population
+output_population = Text(root, bg='gray')
+output_population.place(relx=0.02, rely=0.85, relwidth=0.3, relheight=0.1)
+
 #How to use text
 how_to_use = tk.Label(root, text = 'How to use:\n\n This program shows amount of carbon\n dioxide emissions from year 1960 to 2014.\n You are able to search results by using year and country')
 how_to_use.place(relwidth=0.3, relheight=0.16, relx=0.02, rely=0.068 )
@@ -91,6 +102,8 @@ Output_basicdata_Label = tk.Label(root, text ='Results', bg='gray', font = ('Cal
 Output_basicdata_Label.place(relx=0.075, rely=0.29, relwidth=0.18, relheight=0.05)
 Output_development_Label = tk.Label(root, text ='Development', bg='gray', font = ('Calibri, 12'))
 Output_development_Label.place(relx=0.075, rely=0.54, relwidth=0.18, relheight=0.05)
+Output_population_Label = tk.Label(root, text = 'Population', bg='gray', font = ('Calibri, 12'))
+Output_population_Label.place(relx=0.075, rely=0.79, relwidth=0.18, relheight=0.05)
 Country_Label = tk.Label(root, text = 'Country: ')
 Country_Label.place(relwidth=0.05, relheight=0.05, relx=0.35, rely=0.08)
 Year_Label = tk.Label(root, text = 'Year: ')
